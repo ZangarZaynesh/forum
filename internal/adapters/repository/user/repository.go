@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"net/http"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/repository"
 	"github.com/ZangarZaynesh/forum/internal/module"
@@ -22,14 +21,14 @@ func NewRepository(db *sql.DB) repository.User {
 	return &repo{db: db}
 }
 
-func (r *repo) CheckByLogin(ctx context.Context, dto module.CreateUserDTO) error {
+func (r *repo) CheckByLogin(ctx context.Context, dto *module.CreateUserDTO) error {
 	if !test("login", dto.Login, r) {
 		return errors.New("This login already exists")
 	}
 	return nil
 }
 
-func (r *repo) CheckByEmail(ctx context.Context, dto module.CreateUserDTO) error {
+func (r *repo) CheckByEmail(ctx context.Context, dto *module.CreateUserDTO) error {
 	if !test("email", dto.Email, r) {
 		return errors.New("This email already exists")
 	}
@@ -37,14 +36,10 @@ func (r *repo) CheckByEmail(ctx context.Context, dto module.CreateUserDTO) error
 }
 
 func (r *repo) Create(ctx context.Context, dto *module.CreateUserDTO) error {
-	if !test("login", dto.Login, r) {
-		return errors.New(string(http.StatusBadRequest) + " Bad Request")
+	_, err := r.db.Exec("INSERT INTO users (login, password, email) VALUES ( ?, ?, ?);", dto.Login, dto.Password, dto.Email)
+	if err != nil {
+		return errors.New("400 Bad Request")
 	}
-
-	if !test("email", dto.Email, r) {
-		return errors.New(string(http.StatusBadRequest) + " Bad Request")
-	}
-
 	return nil
 }
 

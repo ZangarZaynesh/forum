@@ -10,8 +10,8 @@ import (
 
 type User interface {
 	Create(ctx context.Context, dto *module.CreateUserDTO) error
-	CheckByLogin(ctx context.Context, dto module.CreateUserDTO) error
-	CheckByEmail(ctx context.Context, dto module.CreateUserDTO) error
+	CheckByLogin(ctx context.Context, dto *module.CreateUserDTO) error
+	CheckByEmail(ctx context.Context, dto *module.CreateUserDTO) error
 	// Read()
 	// Update()
 	// Delete()

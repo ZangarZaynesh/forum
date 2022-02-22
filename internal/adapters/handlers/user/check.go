@@ -8,7 +8,7 @@ import (
 	"github.com/ZangarZaynesh/forum/internal/module"
 )
 
-func CheckLogin(h handler, dto module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
+func CheckLogin(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
 	if dto.Login == "" {
 		h.Error = "Enter login"
 		http.Redirect(w, r, "/registration/", 302)
@@ -18,31 +18,31 @@ func CheckLogin(h handler, dto module.CreateUserDTO, w http.ResponseWriter, r *h
 
 	if err := h.service.CheckByLogin(h.ctx, dto); err != nil {
 		h.Error = err.Error()
-		http.Redirect(w, r, "/registration/", 303)
+		http.Redirect(w, r, "/registration/", 302)
 		h.Error = ""
 		return false
 	}
 	return true
 }
 
-func CheckEmail(h handler, dto module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
+func CheckEmail(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
 	if !dto.IsEmailValid() {
 		h.Error = "Incorrected email"
-		http.Redirect(w, r, "/registration/", 303)
+		http.Redirect(w, r, "/registration/", 302)
 		h.Error = ""
 		return false
 	}
 
 	if err := h.service.CheckByEmail(h.ctx, dto); err != nil {
 		h.Error = err.Error()
-		http.Redirect(w, r, "/registration/", 303)
+		http.Redirect(w, r, "/registration/", 302)
 		h.Error = ""
 		return false
 	}
 	return true
 }
 
-func CheckPassword(h handler, dto module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
+func CheckPassword(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
 	if dto.Password == "" {
 		h.Error = "Enter password"
 		http.Redirect(w, r, "/registration/", 302)
@@ -52,7 +52,7 @@ func CheckPassword(h handler, dto module.CreateUserDTO, w http.ResponseWriter, r
 
 	if !dto.CheckPassConfirm() {
 		h.Error = "Incorrected confirm"
-		http.Redirect(w, r, "/registration/", 303)
+		http.Redirect(w, r, "/registration/", 302)
 		h.Error = ""
 		return false
 	}

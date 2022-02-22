@@ -18,6 +18,7 @@ type handler struct {
 }
 
 func (h *handler) Registration(w http.ResponseWriter, r *http.Request) {
+
 	if !CheckPathMethod("/registration/", "POST", w, r) {
 		return
 	}
@@ -25,15 +26,15 @@ func (h *handler) Registration(w http.ResponseWriter, r *http.Request) {
 	dto := new(module.CreateUserDTO)
 	dto.Add(r)
 
-	if !CheckLogin(*h, *dto, w, r) {
+	if !CheckLogin(h, dto, w, r) {
 		return
 	}
 
-	if !CheckEmail(*h, *dto, w, r) {
+	if !CheckEmail(h, dto, w, r) {
 		return
 	}
 
-	if !CheckPassword(*h, *dto, w, r) {
+	if !CheckPassword(h, dto, w, r) {
 		return
 	}
 
@@ -42,5 +43,10 @@ func (h *handler) Registration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.service.Create(h.ctx, dto)
+	if err := h.service.Create(h.ctx, dto); err != nil {
+		handlers.ExecTemp("templates/error.html", "error.html", "500 Internal Server Error", w, r)
+		return
+	}
+
+	handlers.ExecTemp("templates/created.html", "created.html", "Successful", w, r)
 }
