@@ -7,6 +7,7 @@ import (
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/repository"
 	"github.com/ZangarZaynesh/forum/internal/module"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type repo struct {
@@ -24,6 +25,20 @@ func NewRepository(db *sql.DB) repository.User {
 func (r *repo) CheckByLogin(ctx context.Context, dto *module.CreateUserDTO) error {
 	if !test("login", dto.Login, r) {
 		return errors.New("This login already exists")
+	}
+	return nil
+}
+
+func (r *repo) CheckSignIn(ctx context.Context, dto *module.SignUserDTO) error {
+	var password []byte
+	row := r.db.QueryRow("SELECT password FROM users WHERE users.login= ?;", dto.Login)
+	err := row.Scan(&password)
+	if errors.Is(err, sql.ErrNoRows) {
+		return errors.New("This login does not exist")
+	}
+	err = bcrypt.CompareHashAndPassword(password, []byte(dto.Password))
+	if err != nil {
+		return errors.New("Invalid password")
 	}
 	return nil
 }

@@ -18,6 +18,13 @@ func (u *service) CheckByLogin(ctx context.Context, dto *module.CreateUserDTO) e
 	return nil
 }
 
+func (u *service) CheckSignIn(ctx context.Context, dto *module.SignUserDTO) error {
+	if err := u.user.CheckSignIn(ctx, dto); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (u *service) CheckByEmail(ctx context.Context, dto *module.CreateUserDTO) error {
 	if err := u.user.CheckByEmail(ctx, dto); err != nil {
 		return err

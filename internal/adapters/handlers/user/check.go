@@ -25,6 +25,23 @@ func CheckLogin(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter, r 
 	return true
 }
 
+func CheckSignIn(h *handler, dto *module.SignUserDTO, w http.ResponseWriter, r *http.Request) bool {
+	if dto.Login == "" {
+		h.Error = "Enter login"
+		http.Redirect(w, r, "/auth/", 302)
+		h.Error = ""
+		return false
+	}
+
+	if err := h.service.CheckSignIn(h.ctx, dto); err != nil {
+		h.Error = err.Error()
+		http.Redirect(w, r, "/auth/", 302)
+		h.Error = ""
+		return false
+	}
+	return true
+}
+
 func CheckEmail(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
 	if !dto.IsEmailValid() {
 		h.Error = "Incorrected email"

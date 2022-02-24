@@ -17,9 +17,9 @@ type handler struct {
 	Error   string
 }
 
-func (h *handler) Registration(w http.ResponseWriter, r *http.Request) {
+func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 
-	if !CheckPathMethod("/registration/", "POST", w, r) {
+	if !CheckPathMethod("/registration/created/", "POST", w, r) {
 		return
 	}
 
@@ -49,4 +49,33 @@ func (h *handler) Registration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	handlers.ExecTemp("templates/created.html", "created.html", "Successful", w, r)
+}
+
+func (h *handler) Registration(w http.ResponseWriter, r *http.Request) {
+	if !CheckPathMethod("/registration/", "GET", w, r) {
+		return
+	}
+	handlers.ExecTemp("templates/registration.html", "registration.html", "", w, r)
+}
+
+func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
+	if !CheckPathMethod("/auth/", "GET", w, r) {
+		return
+	}
+
+	handlers.ExecTemp("templates/signIn.html", "signIn.html", "", w, r)
+}
+
+func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
+	if !CheckPathMethod("/registration/created/", "POST", w, r) {
+		return
+	}
+
+	dto := new(module.SignUserDTO)
+	dto.Add(r)
+
+	if !CheckSignIn(h, dto, w, r) {
+		return
+	}
+
 }

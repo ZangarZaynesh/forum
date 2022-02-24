@@ -40,6 +40,16 @@ func (c *CreateUserDTO) GeneratePassword() bool {
 	return true
 }
 
+type SignUserDTO struct {
+	Login    string `json: "login"`
+	Password string `json: "password"`
+}
+
+func (c *SignUserDTO) Add(r *http.Request) {
+	c.Login = r.FormValue("login")
+	c.Password = r.FormValue("password")
+}
+
 type UpdateUserDTO struct {
 	Login    string `json: "login"`
 	Password string `json: "password"`
