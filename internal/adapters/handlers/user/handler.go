@@ -78,4 +78,7 @@ func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	h.service.CreareCookie(w)
+
+	handlers.ExecTemp("templates/index.html", "index.html", "", w, r)
 }

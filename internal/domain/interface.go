@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/ZangarZaynesh/forum/internal/module"
 )
@@ -13,6 +14,7 @@ type User interface {
 	CheckByLogin(ctx context.Context, dto *module.CreateUserDTO) error
 	CheckByEmail(ctx context.Context, dto *module.CreateUserDTO) error
 	CheckSignIn(ctx context.Context, dto *module.SignUserDTO) error
+	CreareCookie(w http.ResponseWriter)
 }
 
 type Post interface {

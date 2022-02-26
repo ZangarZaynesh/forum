@@ -2,9 +2,11 @@ package user
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/repository"
 	"github.com/ZangarZaynesh/forum/internal/module"
+	"github.com/satori/uuid"
 )
 
 type service struct {
@@ -37,4 +39,14 @@ func (u *service) Create(ctx context.Context, dto *module.CreateUserDTO) error {
 		return err
 	}
 	return nil
+}
+
+func (u *service) CreateCookie(w http.ResponseWriter) {
+	sessionID := uuid.NewV4()
+	cookie := &http.Cookie{
+		Name:   "session",
+		Value:  sessionID.String(),
+		MaxAge: 300,
+	}
+	http.SetCookie(w, cookie)
 }
