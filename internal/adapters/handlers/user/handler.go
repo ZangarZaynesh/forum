@@ -3,6 +3,9 @@ package user
 import (
 	"context"
 	"net/http"
+	"time"
+
+	"github.com/satori/uuid"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/handlers"
 
@@ -12,14 +15,15 @@ import (
 )
 
 type handler struct {
-	service domain.User
-	ctx     context.Context
-	Error   string
+	service  domain.User
+	ctx      context.Context
+	Error    string
+	sessions map[uuid.UUID]time.Time
 }
 
 func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 
-	if !CheckPathMethod("/registration/created/", "POST", w, r) {
+	if !CheckPathMethod(h, "/registration/created/", "POST", w, r) {
 		return
 	}
 
@@ -39,35 +43,39 @@ func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !dto.GeneratePassword() {
-		handlers.ExecTemp("templates/error.html", "error.html", "500 Internal Server Error", w, r)
+		h.Error = "500 Internal Server Error"
+		handlers.ExecTemp("templates/error.html", "error.html", w, r)
+		h.Error = ""
 		return
 	}
 
 	if err := h.service.Create(h.ctx, dto); err != nil {
-		handlers.ExecTemp("templates/error.html", "error.html", "500 Internal Server Error", w, r)
+		h.Error = "500 Internal Server Error"
+		handlers.ExecTemp("templates/error.html", "error.html", w, r)
+		h.Error = ""
 		return
 	}
-
-	handlers.ExecTemp("templates/created.html", "created.html", "Successful", w, r)
+	h.Error = "Successful"
+	handlers.ExecTemp("templates/created.html", "created.html", w, r)
 }
 
 func (h *handler) Registration(w http.ResponseWriter, r *http.Request) {
-	if !CheckPathMethod("/registration/", "GET", w, r) {
+	if !CheckPathMethod(h, "/registration/", "GET", w, r) {
 		return
 	}
-	handlers.ExecTemp("templates/registration.html", "registration.html", "", w, r)
+	handlers.ExecTemp("templates/registration.html", "registration.html", w, r)
 }
 
 func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
-	if !CheckPathMethod("/auth/", "GET", w, r) {
+	if !CheckPathMethod(h, "/auth/", "GET", w, r) {
 		return
 	}
 
-	handlers.ExecTemp("templates/signIn.html", "signIn.html", "", w, r)
+	handlers.ExecTemp("templates/signIn.html", "signIn.html", w, r)
 }
 
 func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
-	if !CheckPathMethod("/registration/created/", "POST", w, r) {
+	if !CheckPathMethod(h, "/registration/created/", "POST", w, r) {
 		return
 	}
 
@@ -78,7 +86,6 @@ func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.service.CreareCookie(w)
-
-	handlers.ExecTemp("templates/index.html", "index.html", "", w, r)
+	h.sessions[h.service.CreareCookie(w)] = time.Now()
+	handlers.ExecTemp("templates/index.html", "index.html", w, r)
 }

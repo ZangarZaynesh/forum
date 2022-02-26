@@ -41,7 +41,7 @@ func (u *service) Create(ctx context.Context, dto *module.CreateUserDTO) error {
 	return nil
 }
 
-func (u *service) CreateCookie(w http.ResponseWriter) {
+func (u *service) CreateCookie(w http.ResponseWriter) uuid.UUID {
 	sessionID := uuid.NewV4()
 	cookie := &http.Cookie{
 		Name:   "session",
@@ -49,4 +49,5 @@ func (u *service) CreateCookie(w http.ResponseWriter) {
 		MaxAge: 300,
 	}
 	http.SetCookie(w, cookie)
+	return sessionID
 }

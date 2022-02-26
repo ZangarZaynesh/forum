@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/satori/uuid"
+
 	"github.com/ZangarZaynesh/forum/internal/module"
 )
 
@@ -14,7 +16,7 @@ type User interface {
 	CheckByLogin(ctx context.Context, dto *module.CreateUserDTO) error
 	CheckByEmail(ctx context.Context, dto *module.CreateUserDTO) error
 	CheckSignIn(ctx context.Context, dto *module.SignUserDTO) error
-	CreareCookie(w http.ResponseWriter)
+	CreareCookie(w http.ResponseWriter) uuid.UUID
 }
 
 type Post interface {

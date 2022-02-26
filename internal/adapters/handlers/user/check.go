@@ -76,14 +76,18 @@ func CheckPassword(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter,
 	return true
 }
 
-func CheckPathMethod(Path, Method string, w http.ResponseWriter, r *http.Request) bool {
+func CheckPathMethod(h *handler, Path, Method string, w http.ResponseWriter, r *http.Request) bool {
 	if r.URL.Path != Path {
-		handlers.ExecTemp("templates/error.html", "error.html", "400 Bad Request", w, r)
+		h.Error = "400 Bad Request"
+		handlers.ExecTemp("templates/error.html", "error.html", w, r)
+		h.Error = ""
 		return false
 	}
 
 	if r.Method != Method {
-		handlers.ExecTemp("templates/error.html", "error.html", "405 Method Not Allowed", w, r)
+		h.Error = "405 Method Not Allowed"
+		handlers.ExecTemp("templates/error.html", "error.html", w, r)
+		h.Error = ""
 		return false
 	}
 	return true
