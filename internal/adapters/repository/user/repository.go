@@ -62,6 +62,13 @@ func (r *repo) Delete(id int) error {
 	return nil
 }
 
+func (r *repo) AddCookie(ctx context.Context, dto *module.SignUserDTO) {
+	_, err := r.db.Exec("INSERT INTO sessions (user_id, uuid, createTime, duration) VALUES ( ?, ?, ?, ?);", dto.UserId, dto.UUID, dto.CreateTimeUUID, dto.Duration)
+	if err != nil {
+		return err
+	}
+}
+
 func test(NameColumn, ValueColumn string, r *repo) bool {
 	row := r.db.QueryRow("SELECT ? FROM users WHERE users."+NameColumn+"= ?;", NameColumn, ValueColumn)
 	err := row.Scan()

@@ -41,8 +41,12 @@ func (c *CreateUserDTO) GeneratePassword() bool {
 }
 
 type SignUserDTO struct {
-	Login    string `json: "login"`
-	Password string `json: "password"`
+	Login          string    `json: "login"`
+	Password       string    `json: "password"`
+	UserId         int       `json: "user_id"`
+	UUID           string    `json: "uuid"`
+	CreateTimeUUID time.Time `json: "createuuid"`
+	Duration       time.Time `json: "duration"`
 }
 
 func (c *SignUserDTO) Add(r *http.Request) {
