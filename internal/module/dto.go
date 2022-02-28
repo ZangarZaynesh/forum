@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"time"
 
+	"github.com/satori/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -44,7 +45,7 @@ type SignUserDTO struct {
 	Login          string    `json: "login"`
 	Password       string    `json: "password"`
 	UserId         int       `json: "user_id"`
-	UUID           string    `json: "uuid"`
+	UUID           uuid.UUID `json: "uuid"`
 	CreateTimeUUID time.Time `json: "createuuid"`
 	Duration       time.Time `json: "duration"`
 }

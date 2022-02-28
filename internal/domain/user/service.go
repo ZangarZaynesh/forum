@@ -13,6 +13,7 @@ type service struct {
 	user repository.User
 }
 
+// Create User
 func (u *service) CheckByLogin(ctx context.Context, dto *module.CreateUserDTO) error {
 	if err := u.user.CheckByLogin(ctx, dto); err != nil {
 		return err
@@ -41,6 +42,7 @@ func (u *service) Create(ctx context.Context, dto *module.CreateUserDTO) error {
 	return nil
 }
 
+// Cookie
 func (u *service) CreateCookie(w http.ResponseWriter) uuid.UUID {
 	sessionID := uuid.NewV4()
 	cookie := &http.Cookie{
@@ -50,4 +52,11 @@ func (u *service) CreateCookie(w http.ResponseWriter) uuid.UUID {
 	}
 	http.SetCookie(w, cookie)
 	return sessionID
+}
+
+func (u *service) AddCookie(ctx context.Context, dto *module.SignUserDTO) error {
+	if err := u.user.AddCookie(ctx, dto); err != nil {
+		return err
+	}
+	return nil
 }

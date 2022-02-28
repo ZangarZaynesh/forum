@@ -31,8 +31,8 @@ func (r *repo) CheckByLogin(ctx context.Context, dto *module.CreateUserDTO) erro
 
 func (r *repo) CheckSignIn(ctx context.Context, dto *module.SignUserDTO) error {
 	var password []byte
-	row := r.db.QueryRow("SELECT password FROM users WHERE users.login= ?;", dto.Login)
-	err := row.Scan(&password)
+	row := r.db.QueryRow("SELECT id ,password FROM users WHERE users.login= ?;", dto.Login)
+	err := row.Scan(&dto.UserId, &password)
 	if errors.Is(err, sql.ErrNoRows) {
 		return errors.New("This login does not exist")
 	}
@@ -62,11 +62,12 @@ func (r *repo) Delete(id int) error {
 	return nil
 }
 
-func (r *repo) AddCookie(ctx context.Context, dto *module.SignUserDTO) {
+func (r *repo) AddCookie(ctx context.Context, dto *module.SignUserDTO) error {
 	_, err := r.db.Exec("INSERT INTO sessions (user_id, uuid, createTime, duration) VALUES ( ?, ?, ?, ?);", dto.UserId, dto.UUID, dto.CreateTimeUUID, dto.Duration)
 	if err != nil {
 		return err
 	}
+	return nil
 }
 
 func test(NameColumn, ValueColumn string, r *repo) bool {

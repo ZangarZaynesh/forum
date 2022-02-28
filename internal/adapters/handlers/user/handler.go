@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/satori/uuid"
-
 	"github.com/ZangarZaynesh/forum/internal/adapters/handlers"
 
 	"github.com/ZangarZaynesh/forum/internal/module"
@@ -15,14 +13,12 @@ import (
 )
 
 type handler struct {
-	service  domain.User
-	ctx      context.Context
-	Error    string
-	sessions map[uuid.UUID]time.Time
+	service domain.User
+	ctx     context.Context
+	Error   string
 }
 
 func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
-
 	if !CheckPathMethod(h, "/registration/created/", "POST", w, r) {
 		return
 	}
@@ -86,6 +82,12 @@ func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.sessions[h.service.CreareCookie(w)] = time.Now()
+	dto.UUID, dto.CreateTimeUUID, dto.Duration = h.service.CreateCookie(w), time.Now(), time.Now().AddDate(0, 0, 1)
+	if err := h.service.AddCookie(h.ctx, dto); err != nil {
+		h.Error = err.Error()
+		handlers.ExecTemp("templates/error.html", "error.html", w, r)
+		h.Error = ""
+		return
+	}
 	handlers.ExecTemp("templates/index.html", "index.html", w, r)
 }

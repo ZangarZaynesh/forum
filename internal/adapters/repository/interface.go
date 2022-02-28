@@ -11,5 +11,5 @@ type User interface {
 	CheckByEmail(ctx context.Context, dto *module.CreateUserDTO) error
 	Create(ctx context.Context, dto *module.CreateUserDTO) error
 	CheckSignIn(ctx context.Context, dto *module.SignUserDTO) error
-	// Delete(id int) error
+	AddCookie(ctx context.Context, dto *module.SignUserDTO) error
 }
