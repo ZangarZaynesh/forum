@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/repository"
 	"github.com/ZangarZaynesh/forum/internal/module"
@@ -46,9 +47,10 @@ func (u *service) Create(ctx context.Context, dto *module.CreateUserDTO) error {
 func (u *service) CreateCookie(w http.ResponseWriter) uuid.UUID {
 	sessionID := uuid.NewV4()
 	cookie := &http.Cookie{
-		Name:   "session",
-		Value:  sessionID.String(),
-		MaxAge: 300,
+		Name:    "session",
+		Value:   sessionID.String(),
+		Expires: time.Now().AddDate(0, 0, 1),
+		MaxAge:  24 * 3600,
 	}
 	http.SetCookie(w, cookie)
 	return sessionID

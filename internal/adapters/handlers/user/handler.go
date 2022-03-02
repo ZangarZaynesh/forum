@@ -18,6 +18,14 @@ type handler struct {
 	Error   string
 }
 
+func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
+	if !CheckPathMethod(h, "/", "GET", w, r) {
+		return
+	}
+
+	Session := r.Cookies()
+}
+
 func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 	if !CheckPathMethod(h, "/registration/created/", "POST", w, r) {
 		return
