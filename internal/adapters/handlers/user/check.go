@@ -3,12 +3,10 @@ package user
 import (
 	"net/http"
 
-	"github.com/ZangarZaynesh/forum/internal/adapters/handlers"
-
 	"github.com/ZangarZaynesh/forum/internal/module"
 )
 
-func CheckLogin(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
+func (h *handler) CheckLogin(dto *module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
 	if dto.Login == "" {
 		h.Error = "Enter login"
 		http.Redirect(w, r, "/registration/", 302)
@@ -25,7 +23,7 @@ func CheckLogin(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter, r 
 	return true
 }
 
-func CheckSignIn(h *handler, dto *module.SignUserDTO, w http.ResponseWriter, r *http.Request) bool {
+func (h *handler) CheckSignIn(dto *module.SignUserDTO, w http.ResponseWriter, r *http.Request) bool {
 	if dto.Login == "" {
 		h.Error = "Enter login"
 		http.Redirect(w, r, "/auth/", 302)
@@ -42,7 +40,7 @@ func CheckSignIn(h *handler, dto *module.SignUserDTO, w http.ResponseWriter, r *
 	return true
 }
 
-func CheckEmail(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
+func (h *handler) CheckEmail(dto *module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
 	if !dto.IsEmailValid() {
 		h.Error = "Incorrected email"
 		http.Redirect(w, r, "/registration/", 302)
@@ -59,7 +57,7 @@ func CheckEmail(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter, r 
 	return true
 }
 
-func CheckPassword(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
+func (h *handler) CheckPassword(dto *module.CreateUserDTO, w http.ResponseWriter, r *http.Request) bool {
 	if dto.Password == "" {
 		h.Error = "Enter password"
 		http.Redirect(w, r, "/registration/", 302)
@@ -70,23 +68,6 @@ func CheckPassword(h *handler, dto *module.CreateUserDTO, w http.ResponseWriter,
 	if !dto.CheckPassConfirm() {
 		h.Error = "Incorrected confirm"
 		http.Redirect(w, r, "/registration/", 302)
-		h.Error = ""
-		return false
-	}
-	return true
-}
-
-func CheckPathMethod(h *handler, Path, Method string, w http.ResponseWriter, r *http.Request) bool {
-	if r.URL.Path != Path {
-		h.Error = "400 Bad Request"
-		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		h.Error = ""
-		return false
-	}
-
-	if r.Method != Method {
-		h.Error = "405 Method Not Allowed"
-		handlers.ExecTemp("templates/error.html", "error.html", w, r)
 		h.Error = ""
 		return false
 	}

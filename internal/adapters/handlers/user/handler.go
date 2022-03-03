@@ -6,10 +6,9 @@ import (
 	"time"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/handlers"
+	"github.com/ZangarZaynesh/forum/internal/domain"
 
 	"github.com/ZangarZaynesh/forum/internal/module"
-
-	"github.com/ZangarZaynesh/forum/internal/domain"
 )
 
 type handler struct {
@@ -18,43 +17,35 @@ type handler struct {
 	Error   string
 }
 
-func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
-	if !CheckPathMethod(h, "/", "GET", w, r) {
-		return
-	}
-
-	Session := r.Cookies()
-}
-
 func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
-	if !CheckPathMethod(h, "/registration/created/", "POST", w, r) {
+	if !h.CheckPathMethod("/registration/created/", "POST", w, r) {
 		return
 	}
 
 	dto := new(module.CreateUserDTO)
 	dto.Add(r)
 
-	if !CheckLogin(h, dto, w, r) {
+	if !h.CheckLogin(dto, w, r) {
 		return
 	}
 
-	if !CheckEmail(h, dto, w, r) {
+	if !h.CheckEmail(dto, w, r) {
 		return
 	}
 
-	if !CheckPassword(h, dto, w, r) {
+	if !h.CheckPassword(dto, w, r) {
 		return
 	}
 
 	if !dto.GeneratePassword() {
-		h.Error = "500 Internal Server Error"
+		h.Error = http.StatusText(500)
 		handlers.ExecTemp("templates/error.html", "error.html", w, r)
 		h.Error = ""
 		return
 	}
 
 	if err := h.service.Create(h.ctx, dto); err != nil {
-		h.Error = "500 Internal Server Error"
+		h.Error = http.StatusText(500)
 		handlers.ExecTemp("templates/error.html", "error.html", w, r)
 		h.Error = ""
 		return
@@ -64,14 +55,14 @@ func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) Registration(w http.ResponseWriter, r *http.Request) {
-	if !CheckPathMethod(h, "/registration/", "GET", w, r) {
+	if !h.CheckPathMethod("/registration/", "GET", w, r) {
 		return
 	}
 	handlers.ExecTemp("templates/registration.html", "registration.html", w, r)
 }
 
 func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
-	if !CheckPathMethod(h, "/auth/", "GET", w, r) {
+	if !h.CheckPathMethod("/auth/", "GET", w, r) {
 		return
 	}
 
@@ -79,14 +70,14 @@ func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
-	if !CheckPathMethod(h, "/registration/created/", "POST", w, r) {
+	if !h.CheckPathMethod("/registration/created/", "POST", w, r) {
 		return
 	}
 
 	dto := new(module.SignUserDTO)
 	dto.Add(r)
 
-	if !CheckSignIn(h, dto, w, r) {
+	if !h.CheckSignIn(dto, w, r) {
 		return
 	}
 
@@ -98,4 +89,21 @@ func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	handlers.ExecTemp("templates/index.html", "index.html", w, r)
+}
+
+func (h *handler) CheckPathMethod(Path, Method string, w http.ResponseWriter, r *http.Request) bool {
+	if r.URL.Path != Path {
+		h.Error = http.StatusText(400)
+		handlers.ExecTemp("templates/error.html", "error.html", w, r)
+		h.Error = ""
+		return false
+	}
+
+	if r.Method != Method {
+		h.Error = http.StatusText(405)
+		handlers.ExecTemp("templates/error.html", "error.html", w, r)
+		h.Error = ""
+		return false
+	}
+	return true
 }
