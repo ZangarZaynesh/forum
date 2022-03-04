@@ -55,74 +55,79 @@ func (c *SignUserDTO) Add(r *http.Request) {
 	c.Password = r.FormValue("password")
 }
 
-type UpdateUserDTO struct {
-	Login    string `json: "login"`
-	Password string `json: "password"`
-	Email    string `json: "email"`
+type HomePageDTO struct {
+	UserId int
+	Post
 }
 
-type DeleteUserDTO struct {
-	Id int `json: "id"`
-}
+// type UpdateUserDTO struct {
+// 	Login    string `json: "login"`
+// 	Password string `json: "password"`
+// 	Email    string `json: "email"`
+// }
 
-type CreatePostDTO struct {
-	Title      string    `json: "title"`
-	PostText   string    `json: "posttext"`
-	Date       time.Time `json: "date"`
-	CategoryId int       `json: "categoryid"`
-}
+// type DeleteUserDTO struct {
+// 	Id int `json: "id"`
+// }
 
-type UpdatePostDTO struct {
-	Title      string    `json: "title"`
-	PostText   string    `json: "posttext"`
-	Date       time.Time `json: "date"`
-	CategoryId int       `json: "categoryid"`
-}
+// type CreatePostDTO struct {
+// 	Title      string    `json: "title"`
+// 	PostText   string    `json: "posttext"`
+// 	Date       time.Time `json: "date"`
+// 	CategoryId int       `json: "categoryid"`
+// }
 
-type DeletePostDTO struct {
-	Id     int `json: "id"`
-	UserId int `json: "userid"`
-}
+// type UpdatePostDTO struct {
+// 	Title      string    `json: "title"`
+// 	PostText   string    `json: "posttext"`
+// 	Date       time.Time `json: "date"`
+// 	CategoryId int       `json: "categoryid"`
+// }
 
-type CreateCommentDTO struct {
-	Comment string    `json: "comment"`
-	Date    time.Time `json: "date"`
-	UserId  int       `json: "userid"`
-	PostId  int       `json: "postid"`
-}
+// type DeletePostDTO struct {
+// 	Id     int `json: "id"`
+// 	UserId int `json: "userid"`
+// }
 
-type UpdateCommentDTO struct {
-	Comment string    `json: "comment"`
-	Date    time.Time `json: "date"`
-}
+// type CreateCommentDTO struct {
+// 	Comment string    `json: "comment"`
+// 	Date    time.Time `json: "date"`
+// 	UserId  int       `json: "userid"`
+// 	PostId  int       `json: "postid"`
+// }
 
-type DeleteCommentDTO struct {
-	Id     int `json: "id"`
-	PostId int `json: "PostId"`
-}
+// type UpdateCommentDTO struct {
+// 	Comment string    `json: "comment"`
+// 	Date    time.Time `json: "date"`
+// }
 
-type CreatePostLikesDTO struct {
-	Value  byte `json: "value"`
-	UserId int  `json: "userid"`
-	PostId int  `json: "postid"`
-}
+// type DeleteCommentDTO struct {
+// 	Id     int `json: "id"`
+// 	PostId int `json: "PostId"`
+// }
 
-type UpdatePostLikesDTO struct {
-	Value byte `json: "value"`
-}
+// type CreatePostLikesDTO struct {
+// 	Value  byte `json: "value"`
+// 	UserId int  `json: "userid"`
+// 	PostId int  `json: "postid"`
+// }
 
-type CreateCommentLikesDTO struct {
-	Value     string `json: "value"`
-	UserId    int    `json: "userid"`
-	CommentId int    `json: "commentid"`
-}
+// type UpdatePostLikesDTO struct {
+// 	Value byte `json: "value"`
+// }
 
-type UpdateCommentLikesDTO struct {
-	Value string `json: "value"`
-}
+// type CreateCommentLikesDTO struct {
+// 	Value     string `json: "value"`
+// 	UserId    int    `json: "userid"`
+// 	CommentId int    `json: "commentid"`
+// }
 
-type CreateSessionDTO struct {
-	Key    string    `json: "key"`
-	Date   time.Time `json: "date"`
-	UserId int       `json: "userid"`
-}
+// type UpdateCommentLikesDTO struct {
+// 	Value string `json: "value"`
+// }
+
+// type CreateSessionDTO struct {
+// 	Key    string    `json: "key"`
+// 	Date   time.Time `json: "date"`
+// 	UserId int       `json: "userid"`
+// }

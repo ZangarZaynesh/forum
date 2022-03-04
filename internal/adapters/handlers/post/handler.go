@@ -6,6 +6,7 @@ import (
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/handlers"
 	"github.com/ZangarZaynesh/forum/internal/domain"
+	"github.com/ZangarZaynesh/forum/internal/module"
 )
 
 type handler struct {
@@ -18,8 +19,8 @@ func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
 	if !h.CheckPathMethod("/", "GET", w, r) {
 		return
 	}
-
-	if err := h.CheckCookie(r); err != nil {
+	dto := new(module.HomePageDTO)
+	if err := h.CheckCookie(r, dto); err != nil {
 		h.Error = err.Error()
 		handlers.ExecTemp("templates/error.html", "error.html", w, r)
 		h.Error = ""

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/ZangarZaynesh/forum/internal/module"
 )
@@ -12,4 +13,5 @@ type User interface {
 	Create(ctx context.Context, dto *module.CreateUserDTO) error
 	CheckSignIn(ctx context.Context, dto *module.SignUserDTO) error
 	AddCookie(ctx context.Context, dto *module.SignUserDTO) error
+	CheckCookie(ctx context.Context, session *http.Cookie, dto *module.HomePageDTO) error
 }

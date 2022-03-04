@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"net/http"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/repository"
 	"github.com/ZangarZaynesh/forum/internal/module"
@@ -63,8 +64,17 @@ func (r *repo) Delete(id int) error {
 }
 
 func (r *repo) AddCookie(ctx context.Context, dto *module.SignUserDTO) error {
-	_, err := r.db.Exec("INSERT INTO sessions (user_id, uuid, createTime, duration) VALUES ( ?, ?, ?, ?);", dto.UserId, dto.UUID, dto.CreateTimeUUID, dto.Duration)
+	_, err := r.db.Exec("INSERT INTO sessions (user_id, key, date, duration) VALUES ( ?, ?, ?, ?);", dto.UserId, dto.UUID, dto.CreateTimeUUID, dto.Duration)
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *repo) CheckCookie(ctx context.Context, session *http.Cookie, dto *module.HomePageDTO) error {
+	id := r.db.QueryRow("SELECT user_id FROM sessions where key = ? ;", session.Value)
+	err := id.Scan(&dto.UserId)
+	if errors.Is(err, sql.ErrNoRows) {
 		return err
 	}
 	return nil
