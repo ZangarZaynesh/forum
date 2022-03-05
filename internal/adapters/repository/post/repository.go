@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/repository"
 	"github.com/ZangarZaynesh/forum/internal/module"
@@ -23,6 +24,31 @@ func (r *repo) CheckCookie(ctx context.Context, session *http.Cookie, dto *modul
 	err := id.Scan(&dto.UserId)
 	if errors.Is(err, sql.ErrNoRows) {
 		return err
+	}
+	return nil
+}
+
+func (r *repo) GetPost(ctx context.Context, dto *module.HomePageDTO) error {
+	rows, err := r.db.Query("SELECT id, date, user_id, title, post FROM posts")
+	if err != nil {
+		return err
+	}
+
+	for rows.Next() {
+		var id, userId int
+		var date time.Time
+		var title, post string
+		err = rows.Scan(&id, &date, &userId, &title, &post)
+		if err != nil {
+			return err
+		}
+		dto.Posts = append(dto.Posts, module.ShowPostDTO{
+			Id:     id,
+			Title:  title,
+			Post:   post,
+			Date:   date,
+			UserId: userId,
+		})
 	}
 	return nil
 }

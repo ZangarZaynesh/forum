@@ -57,77 +57,13 @@ func (c *SignUserDTO) Add(r *http.Request) {
 
 type HomePageDTO struct {
 	UserId int
-	Post
+	Posts  []ShowPostDTO
 }
 
-// type UpdateUserDTO struct {
-// 	Login    string `json: "login"`
-// 	Password string `json: "password"`
-// 	Email    string `json: "email"`
-// }
-
-// type DeleteUserDTO struct {
-// 	Id int `json: "id"`
-// }
-
-// type CreatePostDTO struct {
-// 	Title      string    `json: "title"`
-// 	PostText   string    `json: "posttext"`
-// 	Date       time.Time `json: "date"`
-// 	CategoryId int       `json: "categoryid"`
-// }
-
-// type UpdatePostDTO struct {
-// 	Title      string    `json: "title"`
-// 	PostText   string    `json: "posttext"`
-// 	Date       time.Time `json: "date"`
-// 	CategoryId int       `json: "categoryid"`
-// }
-
-// type DeletePostDTO struct {
-// 	Id     int `json: "id"`
-// 	UserId int `json: "userid"`
-// }
-
-// type CreateCommentDTO struct {
-// 	Comment string    `json: "comment"`
-// 	Date    time.Time `json: "date"`
-// 	UserId  int       `json: "userid"`
-// 	PostId  int       `json: "postid"`
-// }
-
-// type UpdateCommentDTO struct {
-// 	Comment string    `json: "comment"`
-// 	Date    time.Time `json: "date"`
-// }
-
-// type DeleteCommentDTO struct {
-// 	Id     int `json: "id"`
-// 	PostId int `json: "PostId"`
-// }
-
-// type CreatePostLikesDTO struct {
-// 	Value  byte `json: "value"`
-// 	UserId int  `json: "userid"`
-// 	PostId int  `json: "postid"`
-// }
-
-// type UpdatePostLikesDTO struct {
-// 	Value byte `json: "value"`
-// }
-
-// type CreateCommentLikesDTO struct {
-// 	Value     string `json: "value"`
-// 	UserId    int    `json: "userid"`
-// 	CommentId int    `json: "commentid"`
-// }
-
-// type UpdateCommentLikesDTO struct {
-// 	Value string `json: "value"`
-// }
-
-// type CreateSessionDTO struct {
-// 	Key    string    `json: "key"`
-// 	Date   time.Time `json: "date"`
-// 	UserId int       `json: "userid"`
-// }
+type ShowPostDTO struct {
+	Id     int       `json: "id"`
+	Title  string    `json: "title"`
+	Post   string    `json: "posttext"`
+	Date   time.Time `json: "date"`
+	UserId int       `json: "userid"`
+}
