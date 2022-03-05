@@ -20,7 +20,7 @@ func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	dto := new(module.HomePageDTO)
-	if err := h.CheckCookie(r, dto); err != nil {
+	if err := h.CheckCookie(h.ctx, r, dto); err != nil {
 		h.Error = err.Error()
 		handlers.ExecTemp("templates/error.html", "error.html", w, r)
 		h.Error = ""

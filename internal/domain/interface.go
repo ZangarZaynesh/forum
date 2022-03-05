@@ -20,7 +20,9 @@ type User interface {
 	AddCookie(ctx context.Context, dto *module.SignUserDTO) error
 }
 
-type Post interface{}
+type Post interface {
+	CheckCookie(ctx context.Context, session *http.Cookie, dto *module.HomePageDTO) error
+}
 
 type Comment interface{}
 
