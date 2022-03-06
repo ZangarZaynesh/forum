@@ -2,6 +2,8 @@ package post
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"net/http"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/handlers"
@@ -12,7 +14,17 @@ import (
 type handler struct {
 	service domain.Post
 	ctx     context.Context
-	// Error   string
+}
+
+func NewHandler(ctx context.Context, post domain.Post) handlers.Post {
+	return &handler{
+		service: post,
+		ctx:     ctx,
+	}
+}
+
+func (h *handler) Register(router *http.ServeMux) {
+	router.HandleFunc("/", h.Home)
 }
 
 func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
@@ -21,11 +33,21 @@ func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
 	}
 	dto := new(module.HomePageDTO)
 	if err := h.CheckCookie(h.ctx, r, dto); err != nil {
+
 		// h.Error = err.Error()
-		handlers.ExecTemp("templates/error.html", "error.html", w, r)
+		if !errors.Is(err, sql.ErrNoRows) {
+			handlers.ExecTemp("templates/error.html", "error.html", w, r)
+			return
+		}
+		// napisat' owibku
 		// h.Error = ""
+	}
+
+	if err := h.service.GetPost(h.ctx, dto); err != nil {
+		handlers.ExecTemp("templates/error.html", "error.html", w, r)
 		return
 	}
+
 }
 
 func (h *handler) CheckPathMethod(Path, Method string, w http.ResponseWriter, r *http.Request) bool {

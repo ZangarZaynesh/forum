@@ -56,8 +56,9 @@ func (c *SignUserDTO) Add(r *http.Request) {
 }
 
 type HomePageDTO struct {
-	UserId int
-	Posts  []ShowPostDTO
+	UserId   int
+	UserName string
+	Posts    []ShowPostDTO
 }
 
 type ShowPostDTO struct {
