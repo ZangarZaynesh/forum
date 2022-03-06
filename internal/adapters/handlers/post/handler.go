@@ -12,7 +12,7 @@ import (
 type handler struct {
 	service domain.Post
 	ctx     context.Context
-	Error   string
+	// Error   string
 }
 
 func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
@@ -21,25 +21,25 @@ func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
 	}
 	dto := new(module.HomePageDTO)
 	if err := h.CheckCookie(h.ctx, r, dto); err != nil {
-		h.Error = err.Error()
+		// h.Error = err.Error()
 		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		h.Error = ""
+		// h.Error = ""
 		return
 	}
 }
 
 func (h *handler) CheckPathMethod(Path, Method string, w http.ResponseWriter, r *http.Request) bool {
 	if r.URL.Path != Path {
-		h.Error = http.StatusText(400)
+		// h.Error = http.StatusText(400)
 		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		h.Error = ""
+		// h.Error = ""
 		return false
 	}
 
 	if r.Method != Method {
-		h.Error = http.StatusText(405)
+		// h.Error = http.StatusText(405)
 		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		h.Error = ""
+		// h.Error = ""
 		return false
 	}
 	return true

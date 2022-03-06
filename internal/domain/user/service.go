@@ -6,12 +6,17 @@ import (
 	"time"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/repository"
+	"github.com/ZangarZaynesh/forum/internal/domain"
 	"github.com/ZangarZaynesh/forum/internal/module"
 	"github.com/satori/uuid"
 )
 
 type service struct {
 	user repository.User
+}
+
+func NewService(user repository.User) domain.User {
+	return &service{user: user}
 }
 
 // Create User

@@ -14,7 +14,20 @@ import (
 type handler struct {
 	service domain.User
 	ctx     context.Context
-	Error   string
+}
+
+func NewHandler(ctx context.Context, user domain.User) handlers.User {
+	return &handler{
+		service: user,
+		ctx:     ctx,
+	}
+}
+
+func (h *handler) Register(router *http.ServeMux) {
+	router.HandleFunc("/registration/", h.Registration)
+	router.HandleFunc("/registration/created/", h.CreatedUser)
+	router.HandleFunc("/auth/", h.SignIn)
+	router.HandleFunc("/auth/success/", h.SignAccess)
 }
 
 func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
@@ -38,19 +51,19 @@ func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !dto.GeneratePassword() {
-		h.Error = http.StatusText(500)
+		// h.Error = http.StatusText(500)
 		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		h.Error = ""
+		// h.Error = ""
 		return
 	}
 
 	if err := h.service.Create(h.ctx, dto); err != nil {
-		h.Error = http.StatusText(500)
+		// h.Error = http.StatusText(500)
 		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		h.Error = ""
+		// h.Error = ""
 		return
 	}
-	h.Error = "Successful"
+	// h.Error = "Successful"
 	handlers.ExecTemp("templates/created.html", "created.html", w, r)
 }
 
@@ -70,7 +83,7 @@ func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
-	if !h.CheckPathMethod("/registration/created/", "POST", w, r) {
+	if !h.CheckPathMethod("/auth/success/", "POST", w, r) {
 		return
 	}
 
@@ -83,27 +96,11 @@ func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
 
 	dto.UUID, dto.CreateTimeUUID, dto.Duration = h.service.CreateCookie(w), time.Now(), time.Now().AddDate(0, 0, 1)
 	if err := h.service.AddCookie(h.ctx, dto); err != nil {
-		h.Error = err.Error()
+		// h.Error = err.Error()
 		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		h.Error = ""
+		// h.Error = ""
 		return
 	}
-	handlers.ExecTemp("templates/index.html", "index.html", w, r)
-}
-
-func (h *handler) CheckPathMethod(Path, Method string, w http.ResponseWriter, r *http.Request) bool {
-	if r.URL.Path != Path {
-		h.Error = http.StatusText(400)
-		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		h.Error = ""
-		return false
-	}
-
-	if r.Method != Method {
-		h.Error = http.StatusText(405)
-		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		h.Error = ""
-		return false
-	}
-	return true
+	// handlers.ExecTemp("templates/index.html", "index.html", w, r)
+	http.Redirect(w, r, "/", 302)
 }
