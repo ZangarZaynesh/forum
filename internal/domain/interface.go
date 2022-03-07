@@ -23,6 +23,7 @@ type User interface {
 type Post interface {
 	CheckCookie(ctx context.Context, session *http.Cookie, dto *module.HomePageDTO) error
 	GetPost(ctx context.Context, dto *module.HomePageDTO) error
+	GetUserName(ctx context.Context, dto *module.HomePageDTO) error
 }
 
 type Comment interface{}

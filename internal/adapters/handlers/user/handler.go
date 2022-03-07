@@ -14,6 +14,7 @@ import (
 type handler struct {
 	service domain.User
 	ctx     context.Context
+	Error   string
 }
 
 func NewHandler(ctx context.Context, user domain.User) handlers.User {
@@ -51,27 +52,23 @@ func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !dto.GeneratePassword() {
-		// h.Error = http.StatusText(500)
-		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		// h.Error = ""
+		handlers.ExecTemp(http.StatusText(500), "error.html", w, r)
 		return
 	}
 
 	if err := h.service.Create(h.ctx, dto); err != nil {
-		// h.Error = http.StatusText(500)
-		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		// h.Error = ""
+		handlers.ExecTemp(http.StatusText(500), "error.html", w, r)
 		return
 	}
-	// h.Error = "Successful"
-	handlers.ExecTemp("templates/created.html", "created.html", w, r)
+
+	handlers.ExecTemp("Successful", "created.html", w, r)
 }
 
 func (h *handler) Registration(w http.ResponseWriter, r *http.Request) {
 	if !h.CheckPathMethod("/registration/", "GET", w, r) {
 		return
 	}
-	handlers.ExecTemp("templates/registration.html", "registration.html", w, r)
+	handlers.ExecTemp(nil, "registration.html", w, r)
 }
 
 func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
@@ -79,7 +76,7 @@ func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	handlers.ExecTemp("templates/signIn.html", "signIn.html", w, r)
+	handlers.ExecTemp(nil, "signIn.html", w, r)
 }
 
 func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
@@ -96,11 +93,8 @@ func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
 
 	dto.UUID, dto.CreateTimeUUID, dto.Duration = h.service.CreateCookie(w), time.Now(), time.Now().AddDate(0, 0, 1)
 	if err := h.service.AddCookie(h.ctx, dto); err != nil {
-		// h.Error = err.Error()
-		handlers.ExecTemp("templates/error.html", "error.html", w, r)
-		// h.Error = ""
+		handlers.ExecTemp(err.Error(), "error.html", w, r)
 		return
 	}
-	// handlers.ExecTemp("templates/index.html", "index.html", w, r)
 	http.Redirect(w, r, "/", 302)
 }

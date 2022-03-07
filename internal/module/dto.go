@@ -34,10 +34,10 @@ func (c *CreateUserDTO) CheckPassConfirm() bool {
 
 func (c *CreateUserDTO) GeneratePassword() bool {
 	password, err := bcrypt.GenerateFromPassword([]byte(c.Password), 8)
-	c.Password = string(password)
 	if err != nil {
 		return false
 	}
+	c.Password = string(password)
 	return true
 }
 

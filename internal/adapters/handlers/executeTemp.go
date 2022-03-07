@@ -6,15 +6,14 @@ import (
 	"net/http"
 )
 
-func ExecTemp(PathHTML, NameHTML string, w http.ResponseWriter, r *http.Request) {
-
-	tmpl, err := template.ParseFiles(PathHTML)
+func ExecTemp(Date interface{}, NameHTML string, w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/" + NameHTML)
 	if err != nil {
 		Err("500 Internal Server Error", http.StatusInternalServerError, w, r)
 		return
 	}
 
-	err = tmpl.ExecuteTemplate(w, NameHTML, nil)
+	err = tmpl.ExecuteTemplate(w, NameHTML, Date)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		log.Println(err)
@@ -24,5 +23,5 @@ func ExecTemp(PathHTML, NameHTML string, w http.ResponseWriter, r *http.Request)
 
 func Err(Str string, Status int, w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(Status)
-	ExecTemp("templates/error.html", "error.html", w, r)
+	ExecTemp(Str, "error.html", w, r)
 }

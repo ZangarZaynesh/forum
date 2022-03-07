@@ -20,8 +20,8 @@ func NewRepository(db *sql.DB) repository.Post {
 }
 
 func (r *repo) CheckCookie(ctx context.Context, session *http.Cookie, dto *module.HomePageDTO) error {
-	id := r.db.QueryRow("SELECT user_id FROM sessions where key = ? ;", session.Value)
-	err := id.Scan(&dto.UserId)
+	row := r.db.QueryRow("SELECT user_id FROM sessions where key = ? ;", session.Value)
+	err := row.Scan(&dto.UserId)
 	if errors.Is(err, sql.ErrNoRows) {
 		return err
 	}
@@ -49,6 +49,15 @@ func (r *repo) GetPost(ctx context.Context, dto *module.HomePageDTO) error {
 			Date:   date,
 			UserId: userId,
 		})
+	}
+	return nil
+}
+
+func (r *repo) GetUserName(ctx context.Context, dto *module.HomePageDTO) error {
+	row := r.db.QueryRow("SELECT login FROM users where id = ? ;", dto.UserId)
+	err := row.Scan(&dto.UserName)
+	if errors.Is(err, sql.ErrNoRows) {
+		return err
 	}
 	return nil
 }
