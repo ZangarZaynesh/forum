@@ -25,10 +25,3 @@ func (p *service) GetPost(ctx context.Context, dto *module.HomePageDTO) error {
 	}
 	return nil
 }
-
-func (p *service) GetUserName(ctx context.Context, dto *module.HomePageDTO) error {
-	if err := p.post.GetUserName(ctx, dto); err != nil {
-		return err
-	}
-	return nil
-}

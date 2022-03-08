@@ -29,35 +29,41 @@ func (r *repo) CheckCookie(ctx context.Context, session *http.Cookie, dto *modul
 }
 
 func (r *repo) GetPost(ctx context.Context, dto *module.HomePageDTO) error {
-	rows, err := r.db.Query("SELECT id, date, user_id, title, post FROM posts")
+	rows, err := r.db.Query("SELECT date, user_id, title, post FROM posts")
 	if err != nil {
 		return err
 	}
 
 	for rows.Next() {
-		var id, userId int
+		var userId int
 		var date time.Time
-		var title, post string
-		err = rows.Scan(&id, &date, &userId, &title, &post)
+		var title, post, login string
+		var authPost rune
+		err = rows.Scan(&date, &userId, &title, &post)
 		if err != nil {
 			return err
 		}
-		dto.Posts = append(dto.Posts, module.ShowPostDTO{
-			Id:     id,
-			Title:  title,
-			Post:   post,
-			Date:   date,
-			UserId: userId,
-		})
-	}
-	return nil
-}
 
-func (r *repo) GetUserName(ctx context.Context, dto *module.HomePageDTO) error {
-	row := r.db.QueryRow("SELECT login FROM users where id = ? ;", dto.UserId)
-	err := row.Scan(&dto.UserName)
-	if errors.Is(err, sql.ErrNoRows) {
-		return err
+		row := r.db.QueryRow("SELECT login FROM users where id = ?", userId)
+
+		err = row.Scan(&login)
+		if errors.Is(err, sql.ErrNoRows) {
+			return err
+		}
+
+		if dto.UserId == userId {
+			authPost = 't'
+		} else {
+			authPost = 'f'
+		}
+
+		dto.Posts = append(dto.Posts, module.ShowPostDTO{
+			Title:    title,
+			Post:     post,
+			Date:     date,
+			Login:    login,
+			AuthPost: authPost,
+		})
 	}
 	return nil
 }

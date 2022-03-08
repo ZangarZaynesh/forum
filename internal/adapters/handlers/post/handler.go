@@ -12,6 +12,7 @@ import (
 type handler struct {
 	service domain.Post
 	ctx     context.Context
+	Error   string
 }
 
 func NewHandler(ctx context.Context, post domain.Post) handlers.Post {
@@ -32,17 +33,11 @@ func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
 
 	dto := new(module.HomePageDTO)
 	if err := h.CheckCookie(h.ctx, r, dto); err != nil {
-		handlers.ExecTemp(err, "error.html", w, r)
-		return
+		dto.UserId = 0
 	}
 
 	if err := h.service.GetPost(h.ctx, dto); err != nil {
-		handlers.ExecTemp(err, "error.html", w, r)
-		return
-	}
-
-	if err := h.service.GetUserName(h.ctx, dto); err != nil {
-		handlers.ExecTemp(err, "error.html", w, r)
+		handlers.ExecTemp(err.Error(), "error.html", w, r)
 		return
 	}
 

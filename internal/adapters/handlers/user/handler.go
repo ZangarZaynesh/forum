@@ -12,9 +12,10 @@ import (
 )
 
 type handler struct {
-	service domain.User
-	ctx     context.Context
-	Error   string
+	service  domain.User
+	ctx      context.Context
+	Error    string
+	UserAuth string
 }
 
 func NewHandler(ctx context.Context, user domain.User) handlers.User {
@@ -60,7 +61,6 @@ func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 		handlers.ExecTemp(http.StatusText(500), "error.html", w, r)
 		return
 	}
-
 	handlers.ExecTemp("Successful", "created.html", w, r)
 }
 
