@@ -32,6 +32,7 @@ func (r *repo) CheckSignIn(ctx context.Context, dto *module.SignUserDTO) error {
 	if errors.Is(err, sql.ErrNoRows) {
 		return errors.New("This login does not exist")
 	}
+
 	err = bcrypt.CompareHashAndPassword(password, []byte(dto.Password))
 	if err != nil {
 		return errors.New("Invalid password")

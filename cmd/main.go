@@ -19,6 +19,10 @@ func main() {
 	Post := composites.NewPostComposite(ctx, db)
 	User.Handler.Register(router)
 	Post.Handler.Register(router)
+
+	fileServer := http.FileServer(http.Dir("../static"))
+	router.Handle("/static/", http.StripPrefix("/static", fileServer))
+
 	fmt.Println("localhost:8080 listening...")
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {

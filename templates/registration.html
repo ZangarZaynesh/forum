@@ -27,11 +27,11 @@
                     <div class="registerLogin">
                         <input type="text" name="login" placeholder="login" required>
                         <p>
-                            {{ if eq .Str "This login already exists" }}
-                                {{ .Str }}
+                            {{ if eq .Error "This login already exists" }}
+                                {{ .Error }}
                             {{ end }}
-                            {{ if eq .Str "Enter login" }}
-                                {{ .Str }}
+                            {{ if eq .Error "Enter login" }}
+                                {{ .Error }}
                             {{ end }}
                         </p>
                     </div>
@@ -39,8 +39,14 @@
                         <div class="registerPasswordFirst">
                             <input type="password" name="password" placeholder="password" required>
                             <p>
-                            {{ if eq .Str "Enter password" }}
-                                {{ .Str }}
+                            {{ if eq .Error "Enter password" }}
+                                {{ .Error }}
+                            {{ end }}
+                            </p>
+                            <input type="password" name="confirm" placeholder="confirm" required>
+                            <p>
+                            {{ if eq .Error "Enter confirm" }}
+                                {{ .Error }}
                             {{ end }}
                             </p>
                         </div>
@@ -51,11 +57,11 @@
                     <div class="registerEmail">
                         <input type="email" name="email" placeholder="email" required>
                         <p>
-                            {{ if eq .Str "This email already exists" }}
-                                {{ .Str }}
+                            {{ if eq .Error "This email already exists" }}
+                                {{ .Error }}
                             {{ end }}
-                            {{ if eq .Str "Incorrected email" }}
-                                {{ .Str }}
+                            {{ if eq .Error "Incorrected email" }}
+                                {{ .Error }}
                             {{ end }}
                         </p>
                     </div>

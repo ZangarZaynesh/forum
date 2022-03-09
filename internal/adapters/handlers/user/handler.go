@@ -29,14 +29,13 @@ func (h *handler) Register(router *http.ServeMux) {
 	router.HandleFunc("/registration/", h.Registration)
 	router.HandleFunc("/registration/created/", h.CreatedUser)
 	router.HandleFunc("/auth/", h.SignIn)
-	router.HandleFunc("/auth/success/", h.SignAccess)
+	router.HandleFunc("/auth/user/", h.SignAccess)
 }
 
 func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 	if !h.CheckPathMethod("/registration/created/", "POST", w, r) {
 		return
 	}
-
 	dto := new(module.CreateUserDTO)
 	dto.Add(r)
 
@@ -48,6 +47,7 @@ func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// fmt.Println("adf")
 	if !h.CheckPassword(dto, w, r) {
 		return
 	}
@@ -61,6 +61,7 @@ func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
 		handlers.ExecTemp(http.StatusText(500), "error.html", w, r)
 		return
 	}
+
 	handlers.ExecTemp("Successful", "created.html", w, r)
 }
 
@@ -80,7 +81,7 @@ func (h *handler) SignIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
-	if !h.CheckPathMethod("/auth/success/", "POST", w, r) {
+	if !h.CheckPathMethod("/auth/user/", "POST", w, r) {
 		return
 	}
 

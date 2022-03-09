@@ -53,7 +53,8 @@ func (d *database) createTable() {
 		log.Fatalf("This error is in db.d.createTable().users!!! %v", err)
 	}
 
-	_, err = d.db.Exec(`CREATE TABLE IF NOT EXISTS categories (
+	_, err = d.db.Exec(`CREATE TABLE IF NOT EXISTS categories 
+	(
         "id"    INTEGER NOT NULL UNIQUE,
         "name"    TEXT NOT NULL UNIQUE,
         PRIMARY KEY("id")
