@@ -22,7 +22,7 @@
     margin-top: 40px;
     font-size: xx-large;
     font-style: italic;
-    color: ivory;
+    color: rgb(247, 247, 97);
     font-weight: 900;
 }
 
@@ -42,7 +42,7 @@
 
 .forAuth a {
     padding: 5px;
-    background-color: white;
+    background-color: rgb(241, 234, 125);
     color: brown;
     text-decoration: none;
     border-style: solid;

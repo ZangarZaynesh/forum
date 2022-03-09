@@ -7,7 +7,7 @@ import (
 )
 
 func ExecTemp(Date interface{}, NameHTML string, w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/" + NameHTML)
+	tmpl, err := template.ParseFiles("../templates/" + NameHTML)
 	if err != nil {
 		Err("500 Internal Server Error", http.StatusInternalServerError, w, r)
 		return
