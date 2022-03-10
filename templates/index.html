@@ -12,10 +12,14 @@
         <div class="HeaderName">Posts</div>
         <div class="forAuth">
             <div class="SignIn">
+                {{ if eq .UserId 0 }}
                 <a href="/auth/">Sign In</a>
+                {{ end }}
             </div>
             <div class="Registration">
+                {{ if eq .UserId 0 }}
                 <a href="/registration/">Create an account</a>
+                {{ end }}
             </div>
         </div>
     </div>
