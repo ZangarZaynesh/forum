@@ -30,6 +30,7 @@ func (h *handler) Register(router *http.ServeMux) {
 	router.HandleFunc("/registration/created/", h.CreatedUser)
 	router.HandleFunc("/auth/", h.SignIn)
 	router.HandleFunc("/auth/user/", h.SignAccess)
+	router.HandleFunc("/signOut/", h.SignOut)
 }
 
 func (h *handler) CreatedUser(w http.ResponseWriter, r *http.Request) {
@@ -99,3 +100,22 @@ func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, "/", 302)
 }
+
+func (h *handler) SignOut(w http.ResponseWriter, r *http.Request) {
+	if !h.CheckPathMethod("/signOut/", "GET", w, r) {
+		return
+	}
+
+	dto := new(module.HomePageDTO)
+	if err := h.CheckCookie(h.ctx, r, dto); err != nil {
+		http.Redirect(w, r, "/", 308)
+		return
+	}
+
+	if err := h.DeleteCookie(h.ctx, w, r, dto); err != nil {
+		handlers.ExecTemp(err.Error(), "error.html", w, r)
+	}
+	http.Redirect(w, r, "/", 308)
+}
+
+// nuzhno udalit' cookie esli v db sushestvuiut cookie

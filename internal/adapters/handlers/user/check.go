@@ -1,6 +1,8 @@
 package user
 
 import (
+	"context"
+	"errors"
 	"net/http"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/handlers"
@@ -86,4 +88,27 @@ func (h *handler) CheckPathMethod(Path, Method string, w http.ResponseWriter, r 
 		return false
 	}
 	return true
+}
+
+func (h *handler) CheckCookie(ctx context.Context, r *http.Request, dto *module.HomePageDTO) error {
+	session, err := r.Cookie("session")
+	if errors.Is(err, http.ErrNoCookie) {
+		return err
+	}
+
+	if err = h.service.CheckCookie(ctx, session, dto); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (h *handler) DeleteCookie(ctx context.Context, w http.ResponseWriter, r *http.Request, dto *module.HomePageDTO) error {
+	if err := h.service.DeleteCookie(ctx, w, r); err != nil {
+		return err
+	}
+
+	if err := h.service.DeleteUUID(ctx, dto); err != nil {
+		return err
+	}
+	return nil
 }

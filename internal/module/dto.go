@@ -68,3 +68,7 @@ type ShowPostDTO struct {
 	Login    string    `json: "userid"`
 	AuthPost rune      `json: "authpost"`
 }
+
+type SignOut struct {
+	Session *http.Cookie
+}

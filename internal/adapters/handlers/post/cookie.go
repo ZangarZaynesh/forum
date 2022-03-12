@@ -13,7 +13,6 @@ func (h *handler) CheckCookie(ctx context.Context, r *http.Request, dto *module.
 	if errors.Is(err, http.ErrNoCookie) {
 		return err
 	}
-
 	if err = h.service.CheckCookie(ctx, session, dto); err != nil {
 		return err
 	}

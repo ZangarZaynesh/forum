@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"net/http"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/repository"
 	"github.com/ZangarZaynesh/forum/internal/module"
@@ -60,6 +61,24 @@ func (r *repo) AddCookie(ctx context.Context, dto *module.SignUserDTO) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (r *repo) CheckCookie(ctx context.Context, session *http.Cookie, dto *module.HomePageDTO) error {
+	row := r.db.QueryRow("SELECT user_id FROM sessions where key = ? ;", session.Value)
+	err := row.Scan(&dto.UserId)
+	if errors.Is(err, sql.ErrNoRows) {
+		return err
+	}
+	return nil
+}
+
+func (r *repo) DeleteUUID(ctx context.Context, dto *module.HomePageDTO) error {
+	_, err := r.db.Exec("DELETE FROM sessions WHERE user_id = ?;", dto.UserId)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
