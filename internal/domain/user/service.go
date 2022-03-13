@@ -76,8 +76,6 @@ func (u *service) DeleteCookie(ctx context.Context, w http.ResponseWriter, r *ht
 	session.Expires = time.Unix(1, 0)
 	session.Path = "/"
 	http.SetCookie(w, &session)
-
-	return nil // oshibka
 }
 
 func (u *service) DeleteUUID(ctx context.Context, dto *module.HomePageDTO) error {
