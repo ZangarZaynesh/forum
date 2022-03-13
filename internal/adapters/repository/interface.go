@@ -14,7 +14,7 @@ type User interface {
 	CheckSignIn(ctx context.Context, dto *module.SignUserDTO) error
 	AddCookie(ctx context.Context, dto *module.SignUserDTO) error
 	CheckCookie(ctx context.Context, session *http.Cookie, dto *module.HomePageDTO) error
-	DeleteUUID(ctx context.Context, dto *module.HomePageDTO) error
+	DeleteSession(ctx context.Context, userId int) error
 }
 
 type Post interface {

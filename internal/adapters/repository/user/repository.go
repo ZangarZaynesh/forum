@@ -8,6 +8,8 @@ import (
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/repository"
 	"github.com/ZangarZaynesh/forum/internal/module"
+
+	// "go.mongodb.org/mongo-driver/x/mongo/driver/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -73,8 +75,8 @@ func (r *repo) CheckCookie(ctx context.Context, session *http.Cookie, dto *modul
 	return nil
 }
 
-func (r *repo) DeleteUUID(ctx context.Context, dto *module.HomePageDTO) error {
-	_, err := r.db.Exec("DELETE FROM sessions WHERE user_id = ?;", dto.UserId)
+func (r *repo) DeleteSession(ctx context.Context, userId int) error {
+	_, err := r.db.Exec("DELETE FROM sessions WHERE user_id = ?;", userId)
 	if err != nil {
 		return err
 	}

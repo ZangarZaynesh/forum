@@ -2,6 +2,7 @@ package post
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/ZangarZaynesh/forum/internal/adapters/handlers"
@@ -23,6 +24,7 @@ func NewHandler(ctx context.Context, post domain.Post) handlers.Post {
 }
 
 func (h *handler) Register(router *http.ServeMux) {
+	fmt.Println("/")
 	router.HandleFunc("/", h.Home)
 }
 

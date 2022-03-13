@@ -69,7 +69,7 @@ func (u *service) AddCookie(ctx context.Context, dto *module.SignUserDTO) error 
 	return nil
 }
 
-func (u *service) DeleteCookie(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+func (u *service) DeleteCookie(ctx context.Context, w http.ResponseWriter) {
 	session := http.Cookie{}
 	session.Name = "session"
 	session.MaxAge = -1
@@ -78,8 +78,8 @@ func (u *service) DeleteCookie(ctx context.Context, w http.ResponseWriter, r *ht
 	http.SetCookie(w, &session)
 }
 
-func (u *service) DeleteUUID(ctx context.Context, dto *module.HomePageDTO) error {
-	if err := u.user.DeleteUUID(ctx, dto); err != nil {
+func (u *service) DeleteSession(ctx context.Context, userId int) error {
+	if err := u.user.DeleteSession(ctx, userId); err != nil {
 		return err
 	}
 	return nil

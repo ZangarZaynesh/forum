@@ -19,8 +19,8 @@ type User interface {
 	CreateCookie(w http.ResponseWriter) uuid.UUID
 	AddCookie(ctx context.Context, dto *module.SignUserDTO) error
 	CheckCookie(ctx context.Context, session *http.Cookie, dto *module.HomePageDTO) error
-	DeleteCookie(ctx context.Context, w http.ResponseWriter, r *http.Request) error
-	DeleteUUID(ctx context.Context, dto *module.HomePageDTO) error
+	DeleteCookie(ctx context.Context, w http.ResponseWriter)
+	DeleteSession(ctx context.Context, userId int) error
 }
 
 type Post interface {

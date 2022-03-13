@@ -103,11 +103,9 @@ func (h *handler) CheckCookie(ctx context.Context, r *http.Request, dto *module.
 }
 
 func (h *handler) DeleteCookie(ctx context.Context, w http.ResponseWriter, r *http.Request, dto *module.HomePageDTO) error {
-	if err := h.service.DeleteCookie(ctx, w, r); err != nil {
-		return err
-	}
+	h.service.DeleteCookie(ctx, w)
 
-	if err := h.service.DeleteUUID(ctx, dto); err != nil {
+	if err := h.service.DeleteSession(ctx, dto.UserId); err != nil {
 		return err
 	}
 	return nil
