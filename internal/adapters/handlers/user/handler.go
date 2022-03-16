@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -27,15 +26,10 @@ func NewHandler(ctx context.Context, user domain.User) handlers.User {
 }
 
 func (h *handler) Register(router *http.ServeMux) {
-	fmt.Println("/registration/")
 	router.HandleFunc("/registration/", h.Registration)
-	fmt.Println("/registration/created/")
 	router.HandleFunc("/registration/created/", h.CreatedUser)
-	fmt.Println("/auth/")
 	router.HandleFunc("/auth/", h.SignIn)
-	fmt.Println("/auth/user/")
 	router.HandleFunc("/auth/user/", h.SignAccess)
-	fmt.Println("/signOut/")
 	router.HandleFunc("/signOut/", h.SignOut)
 }
 
@@ -98,13 +92,12 @@ func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.service.DeleteCookie(h.ctx, w)
+	// h.service.DeleteCookie(h.ctx, w)
 
-	if err := h.service.DeleteSession(h.ctx, dto.UserId); err != nil {
-		handlers.ExecTemp(err.Error(), "error.html", w, r)
-		return
-	}
-
+	// if err := h.service.DeleteSession(h.ctx, dto.UserId); err != nil {
+	// 	handlers.ExecTemp(err.Error(), "error.html", w, r)
+	// 	return
+	// }
 	dto.UUID, dto.CreateTimeUUID, dto.Duration = h.service.CreateCookie(w), time.Now(), time.Now().AddDate(0, 0, 1)
 	if err := h.service.AddCookie(h.ctx, dto); err != nil {
 		handlers.ExecTemp(err.Error(), "error.html", w, r)
