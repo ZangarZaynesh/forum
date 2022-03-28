@@ -97,18 +97,12 @@ func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// h.service.DeleteCookie(h.ctx, w)
-
-	// if err := h.service.DeleteSession(h.ctx, dto.UserId); err != nil {
-	// 	handlers.ExecTemp(err.Error(), "error.html", w, r)
-	// 	return
-	// }
 	dto.UUID, dto.CreateTimeUUID, dto.Duration = h.service.CreateCookie(w), time.Now(), time.Now().AddDate(0, 0, 1)
 	if err := h.service.AddCookie(h.ctx, dto); err != nil {
 		handlers.ExecTemp(err.Error(), "error.html", w, r)
 		return
 	}
-	http.Redirect(w, r, "/", 302)
+	http.Redirect(w, r, "/", 303)
 }
 
 func (h *handler) SignOut(w http.ResponseWriter, r *http.Request) {
@@ -118,7 +112,7 @@ func (h *handler) SignOut(w http.ResponseWriter, r *http.Request) {
 
 	dto := new(module.HomePageDTO)
 	if err := h.CheckCookie(h.ctx, r, dto); err != nil {
-		http.Redirect(w, r, "/", 308)
+		handlers.ExecTemp(err.Error(), "error.html", w, r)
 		return
 	}
 
@@ -126,5 +120,5 @@ func (h *handler) SignOut(w http.ResponseWriter, r *http.Request) {
 		handlers.ExecTemp(err.Error(), "error.html", w, r)
 		return
 	}
-	http.Redirect(w, r, "/", 308)
+	http.Redirect(w, r, "/", 303)
 }

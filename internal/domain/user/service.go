@@ -70,12 +70,13 @@ func (u *service) AddCookie(ctx context.Context, dto *module.SignUserDTO) error 
 }
 
 func (u *service) DeleteCookie(ctx context.Context, w http.ResponseWriter) {
-	session := http.Cookie{}
-	session.Name = "session"
-	session.MaxAge = -1
-	session.Expires = time.Unix(1, 0)
-	session.Path = "/"
-	http.SetCookie(w, &session)
+	session := &http.Cookie{
+		Name:    "session",
+		Path:    "/",
+		MaxAge:  -1,
+		Expires: time.Unix(1, 0),
+	}
+	http.SetCookie(w, session)
 }
 
 func (u *service) DeleteSession(ctx context.Context, userId int) error {

@@ -22,6 +22,12 @@
                 <a href="/registration/">Sign Up</a>
                 {{ end }}
             </div>
+            
+            <div class="SignIn">
+                {{ if ne .UserId 0 }}
+                <a href="/createPost/">Create Post</a>
+                {{ end }}
+            </div>
 
             <div class="Registration">
                 {{ if ne .UserId 0 }}

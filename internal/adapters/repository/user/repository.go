@@ -59,7 +59,17 @@ func (r *repo) Create(ctx context.Context, dto *module.CreateUserDTO) error {
 }
 
 func (r *repo) AddCookie(ctx context.Context, dto *module.SignUserDTO) error {
-	_, err := r.db.Exec("INSERT INTO sessions (user_id, key, date, duration) VALUES ( ?, ?, ?, ?);", dto.UserId, dto.UUID, dto.CreateTimeUUID, dto.Duration)
+	row := r.db.QueryRow("SELECT user_id FROM sessions;")
+	var userId int
+	err := row.Scan(&userId)
+	if !errors.Is(err, sql.ErrNoRows) {
+		_, err := r.db.Exec("DELETE FROM sessions WHERE user_id = ?;", userId)
+		if err != nil {
+			return err
+		}
+	}
+
+	_, err = r.db.Exec("INSERT INTO sessions (user_id, key, date, duration) VALUES ( ?, ?, ?, ?);", dto.UserId, dto.UUID, dto.CreateTimeUUID, dto.Duration)
 	if err != nil {
 		return err
 	}
