@@ -44,6 +44,14 @@ func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
 	handlers.ExecTemp(dto, "index.html", w, r)
 }
 
+func (h *handler) CreatePost(w http.ResponseWriter, r *http.Request) {
+	if !h.CheckPathMethod("/createPost/", "GET", w, r) {
+		return
+	}
+
+	handlers.ExecTemp(nil, "createPost.html", w, r)
+}
+
 func (h *handler) CheckPathMethod(Path, Method string, w http.ResponseWriter, r *http.Request) bool {
 	if r.URL.Path != Path {
 		handlers.ExecTemp(http.StatusText(400), "error.html", w, r)
