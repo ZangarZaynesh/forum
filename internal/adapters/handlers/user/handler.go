@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -84,7 +85,11 @@ func (h *handler) SignAccess(w http.ResponseWriter, r *http.Request) {
 	if !h.CheckPathMethod("/auth/user/", "POST", w, r) {
 		return
 	}
-
+	session, err := r.Cookie("session")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(session.Value)
 	dto := new(module.SignUserDTO)
 	dto.Add(r)
 
