@@ -178,7 +178,33 @@
     width: 100px;
 }
 
+.SubmitPost {
+    background-color: white;
+    color: chocolate;
+    border-color: chocolate;
+    border-radius: 5px;
+    border-width: 3px;
+    font-size: large;
+    font-weight: 700;
+    padding: 10px;
+    width: 100px;
+    display: block;
+}
 
+.postText {
+    border-radius: 10px;
+    color: chocolate;
+    border-color: chocolate;
+    border-width: 3px;
+}
+
+.BodyPost {
+    display: block;
+}
+
+.postField {
+    
+}
 
 
 

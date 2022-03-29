@@ -4,17 +4,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/style.css">
     <title>create</title>
 </head>
 <body>
     <div class="Header">
 
     </div>
-    <div class="Body">
-        <form action="/createPost/created/">
+    <div class="BodyPost">
+        <form action="/createPost/created/" method="POST" autocomplete="off">
+
+            <fieldset class="postField">      
+                <legend>Category</legend>      
+                <input type="checkbox" name="favorite_pet" value="News">News<br>      
+                <input type="checkbox" name="favorite_pet" value="Comedy">Comedy<br>      
+                <input type="checkbox" name="favorite_pet" value="Drama">Drama<br>      
+                <input type="checkbox" name="favorite_pet" value="actionMovie">Action movie<br>
+                <input type="checkbox" name="favorite_pet" value="fantasy">Fantasy<br>
+                <input type="checkbox" name="favorite_pet" value="romance">Romance<br>
+                <input type="checkbox" name="favorite_pet" value="thriller">Thriller<br>
+                <input type="checkbox" name="favorite_pet" value="millitary">Millitary<br>
+                <input type="checkbox" name="favorite_pet" value="horror">Horror<br>
+                <input type="checkbox" name="favorite_pet" value="crime">Crime<br>
+                <input type="checkbox" name="favorite_pet" value="childrens">Childrens<br>
+                <br>            
+            </fieldset>
             
-            <textarea name="" id="" cols="30" rows="10"></textarea>
-            <input type="submit" value="Sign In" class="createSubmit">
+            <textarea name="" id="" cols="200" rows="30" class="postText"></textarea>
+            <input type="submit" value="Submit" class="SubmitPost">
         </form>
     </div>
     <div class="Footer">
